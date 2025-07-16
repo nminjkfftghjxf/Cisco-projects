@@ -1,0 +1,459 @@
+
+			//ROUTERS
+
+-------R2--------------
+
+enable
+conf t
+hostname R2
+interface gi0/0
+ip address 192.168.14.1 255.255.255.0
+no shutdown
+exit
+
+interface s0/0/0
+ip address 10.0.0.9 255.255.255.252
+no shutdown
+exit
+
+interface s0/0/1
+ip address 10.0.0.2 255.255.255.252
+no shutdown
+exit
+do wr
+
+//   RIP  R2///
+
+enable
+conf t
+router rip
+version 2
+no auto
+network 192.168.14.0
+network 10.0.0.8
+network 10.0.0.0
+do wr
+
+
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+     
+
+
+
+
+
+
+
+--------R1---------------------
+
+enable
+conf t
+hostname R1
+
+interface s0/0/0
+ip address 10.0.0.1 255.255.255.252
+no shutdown
+exit
+
+interface s0/0/1
+ip address 10.0.0.5 255.255.255.252
+no shutdown
+exit
+
+interface s0/1/1
+ip address 78.47.1.1 255.255.255.252
+no shutdown
+exit
+do wr
+
+
+//STATIC ROUTING R1//
+ip route 0.0.0.0 0.0.0.0 s0/1/1
+
+
+//   RIP R1///
+
+enable
+conf t
+router rip
+version 2
+no auto
+network 10.0.0.4
+network 10.0.0.0
+do wr
+
+
+
+-------R3----------------------------------
+
+enable
+conf t
+hostname R3
+interface gi0/0
+ip address 192.168.92.1 255.255.255.0
+no shutdown
+exit
+
+interface s0/0/0
+ip address 10.0.0.6 255.255.255.252
+no shutdown
+exit
+
+interface s0/0/1
+ip address 10.0.0.10 255.255.255.252
+no shutdown
+exit
+do wr
+
+
+
+//   RIP  R3///
+
+enable
+conf t
+router rip
+version 2
+no auto
+network 192.168.92.0
+network 10.0.0.8
+network 10.0.0.4
+do wr
+
+
+//optionala, eu nu am scris-o
+enable
+conf t
+router rip
+passive-interface gi0/0
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+
+
+
+
+------ISP-----------------------------
+enable
+conf t
+hostname ISP
+
+interface s0/0/0
+ip address 78.47.1.2 255.255.255.252
+no shutdown
+exit
+
+
+
+//STATIC ROUTE
+ip route 192.168.14.0 255.255.255.0 Serial0/0/0
+ip route 192.168.92.0 255.255.255.0 Serial0/0/0
+
+//   RIP  ISP - nu stiu daca aici trebuie cu rip ///
+
+enable
+conf t
+router rip
+version 2
+no auto
+network 78.47.1.0
+do wr
+
+
+-----------------------------------------------------
+ 			//SWICHES
+
+
+
+
+		//SW0
+
+enable
+conf t
+hostname SW0
+interface vlan 1
+ip address 192.168.14.2 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.14.1
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+
+
+		//SW1
+
+enable
+conf t
+hostname SW1
+interface vlan 1
+ip address 192.168.14.3 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.14.1
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+
+
+		//SW2
+
+enable
+conf t
+hostname SW2
+interface vlan 1
+ip address 192.168.14.4 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.14.1
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+		//SW3
+
+enable
+conf t
+hostname SW3
+interface vlan 1
+ip address 192.168.14.5 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.14.1
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+---------------------------------------------
+
+	//SW4
+
+enable
+conf t
+hostname SW4
+interface vlan 1
+ip address 192.168.92.6 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.92.1
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+
+	//SW5
+
+enable
+conf t
+hostname SW5
+interface vlan 1
+ip address 192.168.92.2 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.92.1
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+	//SW6
+
+enable
+conf t
+hostname SW6
+interface vlan 1
+ip address 192.168.92.3 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.92.1
+do wr
+
+//SECURITY//
+
+banner motd #Acces restrictionat#
+line vty 0 15
+password cisco
+login
+exit
+do wr
+enable secret class
+service password-encryption
+line console 0
+password savnet
+login
+exit
+do wr
+
+
+
+
+--------------------------------------------------------------
+			//TFTP SERVER//
+telnet 192.168.14.1   //R2
+copy run tftp
+192.168.92.13
+
+
+telnet 192.168.92.1   //R3
+copy run tftp
+192.168.92.13
+
+telnet 192.168.14.2   //SW0
+copy run tftp
+192.168.92.13
+
+telnet 192.168.14.3   //SW1
+copy run tftp
+192.168.92.13
+
+telnet 192.168.14.4   //SW2
+copy run tftp
+192.168.92.13
+
+telnet 192.168.14.5   //SW3
+copy run tftp
+192.168.92.13
+
+
+telnet 192.168.92.6   //SW4
+copy run tftp
+192.168.92.13
+
+telnet 192.168.14.2   //SW5
+copy run tftp
+192.168.92.13
+
+telnet 192.168.14.3   //SW6
+copy run tftp
+192.168.92.13
+
+
+
+
+
+
+
+
+
+
